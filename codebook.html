@@ -52,65 +52,36 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 
 
-<div id="open-all-files-and-assign-each-to-a-corressponding-data-set.-this-will-make-it-easier-to-merge" class="section level1">
-<h1>Open all files and assign each to a corressponding data set. This will make it easier to merge</h1>
-</div>
-<div id="in-the-next-step" class="section level1">
-<h1>In the next step</h1>
-<p>setwd(“./gettingcleaningdataproject”) download.file(“<a href="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip">https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip</a>”,destfile=“Dataset.zip”,method=“curl”) unzip(zipfile=“Dataset.zip”,exdir=“./SamsungData”) testActivity &lt;- read.table(file.path(“SamsungData”,“UCI HAR Dataset”, “test”,“y_test.txt”), header = FALSE) trainActivity &lt;- read.table(file.path(“SamsungData”,“UCI HAR Dataset”, “test”,“y_train.txt”), header = FALSE) trainSubject &lt;- read.table(file.path(“SamsungData”,“UCI HAR Dataset”, “test”,“subject_train.txt”), header = FALSE) testSubject &lt;- read.table(file.path(“SamsungData”,“UCI HAR Dataset”, “test”,“subject_test.txt”), header = FALSE) testFeatures &lt;- read.table(file.path(“SamsungData”,“UCI HAR Dataset”, “test”,“X_test.txt”), header = FALSE) trainFeatures &lt;- read.table(file.path(“SamsungData”,“UCI HAR Dataset”, “test”,“X_train.txt”), header = FALSE)</p>
-<div id="this-is-merging-the-files-together-to-create-one-data-set.-well-use-the-rbind-function-which-attaches-datasets" class="section level2">
-<h2>This is merging the files together to create one data set. We’ll use the rbind function which attaches datasets</h2>
-</div>
-<div id="to-other-datasets-by-adding-them-to-the-bottom-of-the-last-row-of-the-previous-data-set.-in-order-to-keep-the-different" class="section level2">
-<h2>to other datasets by adding them to the bottom of the last row of the previous data set. In order to keep the different</h2>
-</div>
-<div id="data-separated-based-on-type-we-will-merge-test-and-train-data-based-on-subject-activity-and-features." class="section level2">
-<h2>data separated based on type we will merge ‘test’ and ‘train’ data based on Subject, Activity, and Features.</h2>
-<p>subjectComb &lt;- rbind(trainSubject,testSubject) activityComb &lt;- rbind(trainActivity,testActivity) featureComb &lt;- rbind(trainFeatures,testFeatures)</p>
-</div>
-<div id="we-give-the-variables-a-name-so-that-we-can-reference-them-later" class="section level2">
-<h2>We give the variables a name so that we can reference them later</h2>
-<p>names(subjectComb) &lt;- c(“subject”) names(activityComb) &lt;- c(“activity”) featuresnames &lt;- read.table(file.path(“features.txt”), head=FALSE) names(featureComb) &lt;- featuresnames$V2</p>
-</div>
-<div id="now-well-get-all-the-data-into-one-frame-and-merge-the-columns-so-well-have-access-to-all-the-data" class="section level2">
-<h2>Now we’ll get all the data into one frame and merge the columns so we’ll have access to all the data</h2>
-</div>
-<div id="in-one-spot" class="section level2">
-<h2>in one spot</h2>
-<p>combineCol &lt;- cbind(subjectComb,activityComb)</p>
-</div>
-<div id="in-this-section-we-will-extract-the-measurements-for-only-the-mean-and-standard-deviation.-the-methods" class="section level2">
-<h2>In this section we will extract the measurements for only the mean and standard deviation. The methods</h2>
-</div>
-<div id="used-will-be-std-and-mean" class="section level2">
-<h2>used will be std() and mean()</h2>
-<p>onlyFeatureNames &lt;- featuresnames<span class="math">\(V2[grep(&quot;mean\\(\\)|std\\(\\)&quot;, featuresnames\)</span>V2)] onlySubandAct &lt;- c(as.character(onlyFeatureNames), “subject”, “activity”)</p>
-</div>
-<div id="these-next-variables-will-be-used-to-created-more-descriptive-activity-names-to-the-data-set." class="section level2">
-<h2>These next variables will be used to created more descriptive activity names to the data set.</h2>
-<p>activityNames &lt;- read.table(file.path(“activity_labels.txt”), header=FALSE)</p>
-</div>
-<div id="in-order-to-correctly-assign-each-activity-we-have-to-use-the-as.factor-function-to-rename" class="section level2">
-<h2>In order to correctly assign each activity we have to use the as.factor function to rename</h2>
-</div>
-<div id="each-of-the-values-from-1-6-with-their-corresponding-descriptive-names." class="section level2">
-<h2>each of the values from 1-6 with their corresponding descriptive names.</h2>
-<p>allData<span class="math">\(activity &lt;- as.character(allData\)</span>activity) allData<span class="math">\(activity[allData\)</span>activity == 1] &lt;- “Walking” allData<span class="math">\(activity[allData\)</span>activity == 2] &lt;- “Walking Upstairs” allData<span class="math">\(activity[allData\)</span>activity == 3] &lt;- “Walking Downstairs” allData<span class="math">\(activity[allData\)</span>activity == 4] &lt;- “Sitting” allData<span class="math">\(activity[allData\)</span>activity == 5] &lt;- “Standing” allData<span class="math">\(activity[allData\)</span>activity == 6] &lt;- “Laying” allData<span class="math">\(activity &lt;- as.factor(allData\)</span>activity)</p>
-</div>
-<div id="this-next-part-is-a-little-tough-because-we-have-to-use-regex-to-find-and-replace-the-names-of-some-of-the" class="section level2">
-<h2>This next part is a little tough because we have to use regex to find and replace the names of some of the</h2>
-</div>
-<div id="name-where-its-not-immediately-apparent." class="section level2">
-<h2>name where it’s not immediately apparent.</h2>
-<p>names(allData) &lt;- gsub(“<sup>t“,”Time“, names(allData)) names(allData) &lt;- gsub(”</sup>f”, “Frequency”, names(allData)) names(allData) &lt;- gsub(“Acc”, “Accelerometer”, names(allData)) names(allData) &lt;- gsub(“Gyro”, “Gyroscope”, names(allData)) names(allData) &lt;- gsub(“Mag”, “Magnitude”, names(allData)) names(allData) &lt;- gsub(“BodyBody”, “Body”, names(allData))</p>
-</div>
-<div id="now-that-all-the-names-are-descriptive-and-readable-by-everyone-we-can-make-a-tidy-data-set-which-we" class="section level2">
-<h2>now that all the names are descriptive and readable by everyone, we can make a ‘tidy’ data set which we</h2>
-</div>
-<div id="we-can-use-to-calculate-the-average-of-each-variable." class="section level2">
-<h2>we can use to calculate the average of each variable.</h2>
-<p>library(plyr) allData2 &lt;- aggregate(. ~subject + activity, allData, mean) allData2 &lt;- allData2[order(allData2<span class="math">\(subject,allData2\)</span>activity),] write.table(allData2, file = “tidydata.txt”,row.name=FALSE)</p>
-</div>
+<div id="getting-and-cleaning-data-peer-assessment-codebook" class="section level1">
+<h1>Getting And Cleaning Data Peer Assessment Codebook</h1>
+<p>The datasets provided come in several formats which are not easy to read and understand.</p>
+<p>Those variables were found in several documents downloaded from: <a href="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip">https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip</a></p>
+<p>With the available description found here: <a href="http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones">http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones</a></p>
+<p>I combined rows and columns to make a data set where the columns start with with Subjects (or participants in the study), then the next column is activity, and all the following columns are measurements of standard deviation and mean from the triaxial observations of the Samsung Galaxy S smartphone.</p>
+<p>In the subject column we have a number which represents anonymous participants. These numbers can range between 1 and 30 since there were 30 volunteers.</p>
+<p>In the activities column we can see 1 of 6 activities happening when an observation is recorded. These activities are as follows:</p>
+<ul>
+<li>1 - Walking</li>
+<li>2 - Walking Upstairs</li>
+<li>3 - Walking Downstairs</li>
+<li>4 - Sitting</li>
+<li>5 - Standing</li>
+<li>6 - Laying</li>
+</ul>
+<p>In the following remaining columns I used the names of the given observation types from the triaxial readings. These were renamed slightly from their original labels in order to be more descriptive.</p>
+<p>The original list can of these features is called “features.txt”</p>
+<p>I processed each of the following</p>
+<ol style="list-style-type: decimal">
+<li>“t” becomes “Time”</li>
+<li>“f” becomes “Frequency”</li>
+<li>“Acc” becomes “Accelerometer”</li>
+<li>“Gyro” becomes “Gyroscope”</li>
+<li>“Mag” becomes “Magnitude”</li>
+<li>“BodyBody” becomes “Body”</li>
+</ol>
+<p>Here is an example of how the label transformed “fBodyAccMag-mean()” to “FrequencyBodyAccelerometerMagnitude-mean()”.</p>
+<p>Other than that change you can find the original feature name formula’s in the feature_info.txt</p>
+<p>The run_analysis.R contains this script and creates a second, independent tidy data set with the average of each variable for each activity and each subject.</p>
 </div>
 
 
