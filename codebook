@@ -1,0 +1,17 @@
+//Open all files and assign each to a corressponding data set. This will make it easier to merge
+//In the next step
+
+
+testActivity <- read.table(file.path("test/y_test.txt"), header = FALSE)
+trainActivity <- read.table(file.path("train/y_train.txt"), header = FALSE)
+trainSubject <- read.table(file.path("train/subject_train.txt"), header = FALSE)
+testSubject <- read.table(file.path("test/subject_test.txt"), header = FALSE)
+testFeatures <- read.table(file.path("test/X_test.txt"), header = FALSE)
+trainFeatures <- read.table(file.path("train/X_train.txt"), header = FALSE)
+
+//This is merging the files together to create one data set. We'll use the rbind function which attaches datasets
+//to other datasets by adding them to the bottom of the last row of the previous data set. In order to keep the different //data separated based on type we will merge 'test' and 'train' data based on Subject, Activity, and Features.
+
+
+
+        
